@@ -4,6 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Muslimat Perfumes &amp; Cosmetics</title>
+
+<!-- SEO -->
+<meta name="description" content="Muslimat Perfumes & Cosmetics — luxury fragrances, body sprays, lotions, skincare and makeup. Shop modest beauty essentials in Tamale, Ghana, and order instantly via WhatsApp.">
+<meta name="keywords" content="Muslimat, perfumes Ghana, cosmetics Tamale, luxury fragrances, body spray, body lotion, skincare, makeup, modest beauty, Tamale Ghana shopping">
+
+<!-- Open Graph (how the link looks when shared on WhatsApp, Facebook, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Muslimat Perfumes & Cosmetics">
+<meta property="og:title" content="Muslimat Perfumes & Cosmetics">
+<meta property="og:description" content="Luxury fragrances, body sprays, lotions, skincare and makeup — modest beauty essentials in Tamale, Ghana. Order instantly via WhatsApp.">
+<meta property="og:image" content="muslimat-og-image.png">
+<meta property="og:url" content="https://REPLACE-WITH-YOUR-SITE-URL">
+
+<!-- Twitter Card (falls back to Open Graph tags above if omitted, but explicit is safer) -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Muslimat Perfumes & Cosmetics">
+<meta name="twitter:description" content="Luxury fragrances, body sprays, lotions, skincare and makeup — modest beauty essentials in Tamale, Ghana.">
+<meta name="twitter:image" content="muslimat-og-image.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -140,6 +159,11 @@
     flex-direction:column;
     transition:transform 0.2s ease;
     border:1px solid rgba(201,162,39,0.15);
+    animation:cardIn 0.35s ease both;
+  }
+  @keyframes cardIn{
+    from{ opacity:0; transform:translateY(8px); }
+    to{ opacity:1; transform:translateY(0); }
   }
   .card:hover{ transform:translateY(-3px); }
   .card-img{
@@ -176,6 +200,74 @@
     color:#8a7f6a;
     font-size:0.95rem;
   }
+
+  /* ---------- Loading skeleton (shown until Supabase data arrives) ---------- */
+  .skeleton-card{
+    background:#fff;
+    border-radius:14px;
+    overflow:hidden;
+    border:1px solid rgba(201,162,39,0.15);
+    display:flex;
+    flex-direction:column;
+  }
+  .skeleton-img{
+    width:100%;
+    aspect-ratio:1/1;
+    background:linear-gradient(90deg, var(--sand) 25%, #f7efdc 37%, var(--sand) 63%);
+    background-size:400px 100%;
+    animation:shimmer 1.4s ease infinite;
+  }
+  .skeleton-body{ padding:12px 14px 14px; display:flex; flex-direction:column; gap:8px; }
+  .skeleton-line{
+    height:12px;
+    border-radius:6px;
+    background:linear-gradient(90deg, var(--sand) 25%, #f7efdc 37%, var(--sand) 63%);
+    background-size:400px 100%;
+    animation:shimmer 1.4s ease infinite;
+  }
+  .skeleton-line.w-60{ width:60%; }
+  .skeleton-line.w-40{ width:40%; height:16px; margin-top:4px; }
+  @keyframes shimmer{
+    0%{ background-position:-300px 0; }
+    100%{ background-position:300px 0; }
+  }
+  #loading-note{
+    text-align:center;
+    padding:0 20px 4px;
+    font-size:0.8rem;
+    color:#8a7f6a;
+    font-style:italic;
+  }
+
+  /* ---------- Contact buttons (WhatsApp + Call) ---------- */
+  #contact-fab-wrap{
+    position:fixed;
+    left:18px;
+    bottom:22px;
+    z-index:19;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    transition:opacity 0.25s ease;
+  }
+  .contact-fab{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 4px 14px rgba(14,46,34,0.35);
+    text-decoration:none;
+    transition:transform 0.15s ease;
+  }
+  .contact-fab:active{ transform:scale(0.93); }
+  .contact-fab svg{ width:24px; height:24px; }
+  .contact-fab.whatsapp{ background:#25D366; }
+  .contact-fab.whatsapp svg{ fill:#fff; stroke:none; }
+  .contact-fab.call{ background:var(--deep-green); }
+  .contact-fab.call svg{ fill:none; stroke:var(--gold); stroke-width:2; }
+
   /* Floating cart button */
   #cart-fab{
     position:fixed;
@@ -290,8 +382,24 @@
 
 <nav class="categories" id="categories"></nav>
 
-<div id="grid"></div>
+<div id="loading-note" style="display:none;">Loading products…</div>
+<div id="grid">
+  <!-- Skeleton placeholders shown immediately, before any Supabase data arrives -->
+  <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line w-60"></div><div class="skeleton-line w-40"></div></div></div>
+  <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line w-60"></div><div class="skeleton-line w-40"></div></div></div>
+  <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line w-60"></div><div class="skeleton-line w-40"></div></div></div>
+  <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line w-60"></div><div class="skeleton-line w-40"></div></div></div>
+</div>
 <div id="empty-msg" style="display:none;">No products yet — check back soon.</div>
+
+<div id="contact-fab-wrap">
+  <a id="contact-whatsapp" class="contact-fab whatsapp" href="#" target="_blank" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.36 2 11.76c0 2.06.62 3.97 1.68 5.56L2 22l4.86-1.62A10.1 10.1 0 0012 21.5c5.52 0 10-4.36 10-9.76S17.52 2 12 2zm0 17.7c-1.6 0-3.09-.44-4.35-1.2l-.31-.18-3.15 1.05.99-3.16-.2-.32a7.86 7.86 0 01-1.28-4.33C3.7 7.4 7.4 4 12 4s8.3 3.4 8.3 7.56-3.7 7.56-8.3 7.56zm4.53-5.67c-.25-.13-1.47-.72-1.7-.8-.23-.08-.4-.13-.56.13-.17.25-.65.8-.8.97-.15.17-.3.19-.55.06-.25-.13-1.06-.39-2.02-1.24a7.58 7.58 0 01-1.4-1.73c-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.12-.15.16-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.34-.77-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08 0 1.23.89 2.41 1.02 2.58.12.17 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.19.21-.58.21-1.08.15-1.19-.06-.11-.23-.17-.48-.3z"/></svg>
+  </a>
+  <a id="contact-call" class="contact-fab call" href="tel:" aria-label="Call us">
+    <svg viewBox="0 0 24 24"><path d="M4 5c0-1.1.9-2 2-2h2.2c.5 0 .96.34 1.09.83l1 3.6c.11.4-.02.83-.34 1.1l-1.6 1.36a13.9 13.9 0 006.16 6.16l1.36-1.6c.27-.32.7-.45 1.1-.34l3.6 1c.5.13.83.6.83 1.09V19c0 1.1-.9 2-2 2h-1C9.6 21 3 14.4 3 6V5z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</div>
 
 <button id="cart-fab" onclick="openDrawer()">
   🛍️
@@ -324,6 +432,7 @@
   let activeCategory = "All";
   let whatsappNumber = "";
   let cart = JSON.parse(localStorage.getItem('glowmarket_cart') || '[]');
+  let hasLoaded = false;
 
   // ---- Category icon set (line-style, matches flyer badges) ----
   const ICONS = {
@@ -349,21 +458,65 @@
     return ICONS.default;
   }
 
+  // ---- Contact button numbers ----
+  // TODO: replace these with your real numbers.
+  // WhatsApp number: digits only, country code, no + or spaces (e.g. "233551234567")
+  const CONTACT_WHATSAPP_NUMBER = "233534823154";
+  // Call number: however you'd normally dial it (e.g. "+233551234567")
+  const CONTACT_CALL_NUMBER = "+233534823154";
+
+  // ---- Smart transparency for the contact buttons ----
+  // Full opacity when floating over empty space; fades out when it would
+  // otherwise sit on top of a product card, the header, or other content.
+  let contactFabTicking = false;
+  function updateContactFabOpacity(){
+    const wrap = document.getElementById('contact-fab-wrap');
+    if(!wrap) return;
+    const rect = wrap.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const stack = document.elementsFromPoint(cx, cy);
+    const isBlocking = stack.some(el =>
+      el.closest && el !== wrap && !wrap.contains(el) &&
+      (el.closest('.card') || el.closest('header') || el.closest('.categories') || el.closest('#drawer.open'))
+    );
+    wrap.style.opacity = isBlocking ? '0.35' : '1';
+  }
+  function onContactFabScroll(){
+    if(contactFabTicking) return;
+    contactFabTicking = true;
+    requestAnimationFrame(() => {
+      updateContactFabOpacity();
+      contactFabTicking = false;
+    });
+  }
+  window.addEventListener('scroll', onContactFabScroll, { passive: true });
+  window.addEventListener('resize', onContactFabScroll);
+
   function saveCart(){
     localStorage.setItem('glowmarket_cart', JSON.stringify(cart));
     renderCart();
   }
 
   async function init(){
+    document.getElementById('loading-note').style.display = 'block';
+
     const { data: products, error } = await sb.from('products').select('*').order('created_at', { ascending: false });
     if(!error) allProducts = products || [];
 
     const { data: settings } = await sb.from('store_settings').select('whatsapp_number').eq('id', 1).single();
     if(settings) whatsappNumber = settings.whatsapp_number || "";
 
+    hasLoaded = true;
+    document.getElementById('loading-note').style.display = 'none';
+
+    document.getElementById('contact-whatsapp').href = `https://wa.me/${CONTACT_WHATSAPP_NUMBER}`;
+    document.getElementById('contact-call').href = `tel:${CONTACT_CALL_NUMBER}`;
+
     renderCategories();
     renderGrid();
     renderCart();
+    updateContactFabOpacity();
   }
 
   function renderCategories(){
@@ -374,7 +527,7 @@
       const btn = document.createElement('button');
       btn.className = 'cat-btn' + (cat === activeCategory ? ' active' : '');
       btn.innerHTML = `<span class="cat-icon">${getCategoryIcon(cat)}</span><span>${cat}</span>`;
-      btn.onclick = () => { activeCategory = cat; renderCategories(); renderGrid(); };
+      btn.onclick = () => { activeCategory = cat; renderCategories(); renderGrid(); updateContactFabOpacity(); };
       wrap.appendChild(btn);
     });
   }
@@ -382,6 +535,10 @@
   function renderGrid(){
     const grid = document.getElementById('grid');
     const emptyMsg = document.getElementById('empty-msg');
+
+    // Still waiting on Supabase — keep the skeleton placeholders as-is.
+    if(!hasLoaded) return;
+
     const filtered = activeCategory === "All" ? allProducts : allProducts.filter(p => p.category === activeCategory);
 
     if(filtered.length === 0){
